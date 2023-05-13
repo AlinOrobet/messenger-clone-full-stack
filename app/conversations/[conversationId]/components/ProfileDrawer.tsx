@@ -7,6 +7,7 @@ import {format} from "date-fns";
 import {IoClose, IoTrash} from "react-icons/io5";
 import useOtherUser from "@/app/hooks/useOtherUser";
 import Avatar from "@/app/components/Avatar";
+import ConfirmModal from "./ConfirmModal";
 
 interface ProfileDrawerProps {
   isOpen: boolean;
@@ -35,6 +36,7 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({isOpen, onClose, data}) =>
   }, [data]);
   return (
     <>
+      <ConfirmModal isOpen={confirmOpen} onClose={() => setConfirmOpen(false)} />
       <Transition.Root show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-50" onClose={onClose}>
           <Transition.Child
@@ -85,7 +87,7 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({isOpen, onClose, data}) =>
                           <div className="text-sm text-gray-500">{statusText}</div>
                           <div className="flex gap-10 my-8">
                             <div
-                              onClick={() => {}}
+                              onClick={() => setConfirmOpen(true)}
                               className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-75"
                             >
                               <div className="flex items-center justify-center w-10 h-10 rounded-full bg-neutral-200">
