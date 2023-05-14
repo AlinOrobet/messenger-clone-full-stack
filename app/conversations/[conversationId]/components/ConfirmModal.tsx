@@ -1,13 +1,15 @@
 "use client";
-import Modal from "@/app/components/Modal";
-import useConversation from "@/app/hooks/useConversation";
+
+import React, {useCallback, useState} from "react";
+import {Dialog} from "@headlessui/react";
+import {FiAlertTriangle} from "react-icons/fi";
 import axios from "axios";
 import {useRouter} from "next/navigation";
-import React, {useCallback, useState} from "react";
-import toast from "react-hot-toast";
-import {FiAlertTriangle} from "react-icons/fi";
-import {Dialog, Transition} from "@headlessui/react";
 import Button from "@/app/components/Button";
+import useConversation from "@/app/hooks/useConversation";
+import {toast} from "react-hot-toast";
+import Modal from "@/app/components/Modal";
+
 interface ConfirmModalProps {
   isOpen?: boolean;
   onClose: () => void;
@@ -20,6 +22,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({isOpen, onClose}) => {
 
   const onDelete = useCallback(() => {
     setIsLoading(true);
+
     axios
       .delete(`/api/conversations/${conversationId}`)
       .then(() => {
@@ -29,13 +32,13 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({isOpen, onClose}) => {
       })
       .catch(() => toast.error("Something went wrong!"))
       .finally(() => setIsLoading(false));
-  }, [conversationId, router, onClose]);
+  }, [router, conversationId, onClose]);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <div className="sm:flex sm:items-start">
+      <div className="mt-4 sm:flex sm:items-start">
         <div className="flex items-center justify-center flex-shrink-0 w-12 h-12 mx-auto bg-red-100 rounded-full sm:mx-0 sm:h-10 sm:w-10">
-          <FiAlertTriangle className="w-6 h-6 text-red-600" />
+          <FiAlertTriangle className="w-6 h-6 text-red-600" aria-hidden="true" />
         </div>
         <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
           <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
@@ -48,7 +51,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({isOpen, onClose}) => {
           </div>
         </div>
       </div>
-      <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+      <div className="flex flex-row-reverse mt-5 sm:mt-4">
         <Button disabled={isLoading} danger onClick={onDelete}>
           Delete
         </Button>
